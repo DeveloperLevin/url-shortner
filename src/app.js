@@ -7,7 +7,6 @@ const express = require('express');
 
 // create server 
 const app = express()
-const host = process.env.HOST;
 const port = process.env.PORT;
 
 // middlewares
@@ -27,6 +26,7 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
     const { longUrl } = req.body;
+
     //code to generate hash value and append to the array
 
     // append to database
@@ -63,6 +63,6 @@ app.get('/shortner/:hashValue', (req, res) => {
 })
 
 // Listen to Server
-app.listen(host, port, () => {
+app.listen(port, () => {
     console.log("Listening to Server");
 })
