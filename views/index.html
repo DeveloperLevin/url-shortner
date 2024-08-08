@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shortner</title>
-    <link rel="stylesheet" href="../static/main.css">
+    <link rel="stylesheet" href="/static/main.css">
 </head>
 <body>
     <header>
@@ -15,15 +15,15 @@
     <main id="container">
         <div class="root">
             <h2 class="prompt-title">Enter the URL</h2>
-            <form>
-                <input type="text" class="long-url" placeholder="Enter the URL"/>
-                <button class="submit">Generate</button>
+            <form action="/" method="POST">
+                <input type="text" class="long-url" placeholder="Enter the URL" name="longUrl"/>
+                <button type="submit" class="submit">Generate</button>
                 <button class="query">Query</button>
             </form>
             <h2 class="result"></h2>
         </div>
     </main>
     <footer></footer>
-    <script src="app.js"></script>
+    <script src="../src/app.js"></script>
 </body>
 </html>
