@@ -34,40 +34,67 @@ function checkTableExists() {
             return callback(err);
         }
     })
-
-    connection.close();
 }
 
-// function to add new data
-function checkAndAddData (longUrl, shortUrl=null){
-    const checkPrompt = `SELECT * FROM url_table WHERE longUrl = ?`;
-    connection.query(checkPrompt, [longUrl], (err, results) => {
-        if (err) {
-            return callback(err);
-        }
+// function to check the long url and rediect to the website
+function checkData(shortUrl) {
+    const checkPrompt = 'SELECT * FROM url_shortner WHERE shortUrl = ?';
 
-        // no data exists, add the data to the database
-        if (results.length === 0){
-            const uniqueId = uuidv4();
-            const addPrompt = `INSERT INTO url_table (id, longUrl, shortUrl) VALUES (?, ?, ?)`;
-            
-            connection.query(addPrompt, [uniqueId, longUrl, shortUrl], (err) => {
-              if (err) {
-                return callback(err);
-              }  
-              callback(null, null);
-            })
-        }
-        else {
-            callback(null, results);
-        }
-    })
+    return new Promise((resolve, reject) => {
+        connection.query(checkPrompt, [shortUrl], (err, result) => {
+            if (err) {
+                console.log('Error:', err);
+                return reject(err);
+            }
 
-    // close connection after appending to the database
-    connection.close();
+            if (result.length > 0) {
+                resolve(result[0].longUrl);
+            } else {
+                resolve(null); // Or you can resolve with a different value to indicate not found
+            }
+        });
+        
+        // close database connection
+        connection.close();
+
+    });
 }
+
+// function to add data if no short url for the original url exists
+function checkAndAddData(longUrl, shortUrl = null) {
+    const checkPrompt = 'SELECT * FROM url_shortner WHERE longUrl = ?';
+
+    return new Promise((resolve, reject) => {
+        connection.query(checkPrompt, [longUrl], (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+
+            if (results.length === 0) {
+                // No data exists, add the data to the database
+                const uniqueId = uuidv4();
+                const addPrompt = 'INSERT INTO url_shortner (id, longUrl, shortUrl) VALUES (?, ?, ?)';
+
+                connection.query(addPrompt, [uniqueId, longUrl, shortUrl], (err) => {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve(shortUrl); // Data added successfully
+                });
+            } else {
+                resolve(results[0].shortUrl); // Data already exists
+            }
+        });
+
+        // close database connection
+        connection.close()
+
+    });
+}
+
 
 module.exports = {
+    checkData,
     checkAndAddData,
     checkTableExists
 }

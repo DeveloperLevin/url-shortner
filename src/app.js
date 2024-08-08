@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 // imports
-const { checkAndAddData, checkTableExists } = require('../models/model');
+const { checkAndAddData, checkTableExists, checkData } = require('../models/model');
 const db = require('../models/model'); 
 const express = require('express');
 
@@ -17,6 +17,9 @@ app.use(express.static('public'))
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');
 
+// Initialize database
+checkTableExists()
+
 // routes
 app.get('/', (req, res) => {
     res.render('index')
@@ -24,26 +27,42 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
     const { longUrl } = req.body;
+    //code to generate hash value and append to the array
+
+    // append to database
+    checkAndAddData(longUrl)
+    .then(data => {
+        if (data) {
+            res.render('index', {shortUrl: data})
+        }
+        else {
+            res.status(404).send('No data found or added');
+        }
+    })
+    .catch(err => {
+        console.log("Error: ", err)
+        res.status(500).send('Server response timed out')
+    })
 })
 
 app.get('/shortner/:hashValue', (req, res) => {
     const hashValue = req.params.hashValue;
     const shortUrl = `https://localhost:3000/shortner/` + hashValue;
+
+    // get the longUrl for the respective short url and redirect to that website
+    checkData(shortUrl)
+    .then((longUrl) => {
+        if (longUrl) {
+            res.redirect(longUrl);
+        }
+    })
+    .catch(err => {
+        console.log("Error: ", err)
+        res.status(500).send('Server response timed out')
+    })
 })
 
 // Listen to Server
 app.listen(host, port, () => {
     console.log("Listening to Server");
 })
-
-// // handle submit button
-// const submit = document.querySelector('.submit');
-// submit.addEventListener('click', (e) => {
-//     e.preventDefault()
-//     const userId = uuidv4();
-//     const longUrl = document.querySelector('.long-url').value;
-
-//     // code to generate shortUrl and append to database
-    
-//     // append value to the database
-// })
