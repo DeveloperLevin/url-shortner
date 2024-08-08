@@ -1,6 +1,6 @@
 # URL Shortener
 
-A simple URL shortener application that allows users to shorten long URLs into more manageable links. This project demonstrates basic CRUD operations with a database and integrates with a web interface for user interaction.
+A simple URL shortener application that allows users to shorten long URLs into more manageable links and integrates with a web interface for user interaction.
 
 ## Features
 
