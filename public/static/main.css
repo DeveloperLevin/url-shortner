@@ -64,6 +64,8 @@ header {
 form {
     width: 100%;
     display: flex;
+    flex-direction: column;
+    gap: 1em;
     justify-content: center;
     align-items: center;
 }
@@ -77,10 +79,12 @@ button {
     color: white;
     font-family: 'Courier New', Courier, monospace;
     font-weight: bold;
+    width: 60%;
+    cursor: pointer;
 }
 
 .long-url {
-    width: 50%;
+    width: 60%;
     height: 40px;
     border-radius: 10px;
     padding: 1em;
@@ -100,4 +104,8 @@ footer {
     width: 100%;
     background-color: black;
     height: 10%;
+}
+
+.result {
+    margin-top: 1em;
 }

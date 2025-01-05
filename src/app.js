@@ -1,17 +1,20 @@
 require('dotenv').config()
 
 // imports
-const { checkAndAddData, checkTableExists, checkData } = require('../models/model');
-const db = require('../models/model'); 
+const { checkAndAddData, checkTableExists, checkData } = require('../models/model.js');
 const express = require('express');
+const path = require('path');
+const cors  = require('cors');;
 
 // create server 
 const app = express()
 const port = process.env.PORT;
 
 // middlewares
+app.use(cors());
 app.use(express.urlencoded({ extended: true, limit: '1mb'}));
 app.use(express.static('public'))
+app.set('views', path.join(__dirname, '../views'));
 
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');

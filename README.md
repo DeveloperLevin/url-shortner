@@ -16,8 +16,3 @@ A simple URL shortener application that allows users to shorten long URLs into m
 - **mysql2**: MySQL client for Node.js.
 - **dotenv**: Loads environment variables from a `.env` file.
 - **uuid**: Generates unique identifiers for shortened URLs.
-
-### Prerequisites
-
-- Node.js 
-- MySQL server
